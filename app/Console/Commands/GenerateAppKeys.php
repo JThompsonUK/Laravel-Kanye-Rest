@@ -39,6 +39,6 @@ class GenerateAppKeys extends Command
         $this->info('App Key (KANYE_API_APP_ID): ' . $appKey);
         $this->info('App Secret (KANYE_API_APP_SECRET): ' . $token);
 
-        return 1;
+        return 0;
     }
 }
