@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Manager;
-use App\Services\ApiService;
+use App\Services\QuoteService;
 
-class ApiManager extends Manager
+class QuoteManager extends Manager
 {
     /**
      * Get the default driver name.
@@ -18,12 +18,12 @@ class ApiManager extends Manager
     }
 
     /**
-     * Create an instance of the API service.
+     * Create an instance of the Quote service.
      *
-     * @return \App\Services\ApiService
+     * @return \App\Services\QuoteService
      */
     protected function createExternalDriver()
     {
-        return new ApiService();
+        return new QuoteService();
     }
 }

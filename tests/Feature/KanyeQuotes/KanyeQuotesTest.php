@@ -6,6 +6,8 @@ use App\Models\APIApp;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -19,16 +21,52 @@ class KanyeQuotesTest extends TestCase
     #[Test]
     public function test_fetch_data_caches_correctly()
     {
+        // get quotes - use factory
+        $items = [
+            "quote1",
+            "quote2",
+            "quote3",
+            "quote4",
+            "quote5",
+        ];
+
+        // Fake the HTTP request
+        Http::fake([
+            config('services.kanye_api.endpoint') => function ($request) use ($items) {
+                Log::info('Intercepted request', ['url' => $request->url()]);
+                return Http::response([
+                    'status' => 'success',
+                    'items' => $items,
+                ], 200);
+            },
+        ]);
+
+        Cache::forget($this->cacheKey);
+
+
+
+        // dd($refreshResponse->json());
+
+        // Fake the HTTP request
+        // Http::fake([
+        //     config('services.kanye_api.endpoint') => Http::response([
+        //         'message' => 'Quotes fetched and cached successfully',
+        //         'items' => $items,
+        //     ], 200),
+        // ]);
+
         $headers = $this->getHeaders();
 
-        // Call the endpoint to fetch data and cache it
-        $getData = $this->getJson('/api/data', $headers);
-        $getData->assertStatus(200);
+        // Call the endpoint to fetch quotes and cache it
+        $refreshResponse = $this->getJson('/api/data', $headers);
+        $refreshResponse->assertStatus(200);
 
+        // Call the endpoint to fetch quotes and cache it
         $cachedData = Cache::get($this->cacheKey);
         $this->assertNotNull($cachedData);
 
-        $getData->assertJsonCount(5, 'items');
+        // Assert response has 5 quotes
+        $refreshResponse->assertJsonCount(5, 'items');
     }
 
     #[Test]
@@ -73,7 +111,7 @@ class KanyeQuotesTest extends TestCase
 
         return [
             'app-id' => $apiApp->app_access_id,
-            'Authorization' => $apiApp->accessToken->first()->access_token,
+            'Authorization' =>  "Bearer " . $apiApp->accessToken->first()->access_token,
         ];
     }
 

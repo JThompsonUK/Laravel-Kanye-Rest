@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\ApiManager;
+use App\Services\QuoteManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,8 +12,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton('api', function ($app) {
-            return new ApiManager($app);
+        $this->app->singleton('quotes', function ($app) {
+            return new QuoteManager($app);
         });
     }
 

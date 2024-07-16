@@ -75,7 +75,7 @@ class MiddlewareTest extends TestCase
     {
         $response = $this->json('GET', '/api/data', [], [
             'app-id' => $this->apiApp->app_access_id,
-            'Authorization' => $this->accessToken->access_token,
+            'Authorization' => "Bearer " . $this->accessToken->access_token,
         ]);
 
         $response->assertStatus(200)

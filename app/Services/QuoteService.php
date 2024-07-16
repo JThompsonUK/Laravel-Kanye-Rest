@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Interfaces\QuoteInterface;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
-class ApiService
+class QuoteService implements QuoteInterface
 {
     protected $url;
     protected $token;
@@ -18,7 +19,7 @@ class ApiService
         $this->token = config('services.kanye_api.token');
     }
 
-    public function fetchData()
+    public function fetchQuotes()
     {
         $data = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
@@ -36,7 +37,7 @@ class ApiService
         return null;
     }
 
-    public function refreshData()
+    public function refreshQuotes()
     {
         $data = Cache::get($this->cacheKey);
         return collect($data)->random(5)->all();

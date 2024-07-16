@@ -8,6 +8,7 @@ use App\Models\APIApp;
 use App\Models\AccessToken;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class CheckApiCredentials
 {
@@ -21,7 +22,7 @@ class CheckApiCredentials
     public function handle(Request $request, Closure $next)
     {
         $appId = $request->header('app-id');
-        $accessToken = $request->header('Authorization');
+        $accessToken = $request->bearerToken();
 
         if (!$appId || !$accessToken) {
             return response()->json([

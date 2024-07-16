@@ -39,6 +39,7 @@ return [
         'url' => env('KANYE_API_URL', 'https://api.kanye.rest/quotes'),
         'id' => env('KANYE_API_APP_ID'),
         'secret' => env('KANYE_API_SECRET'),
+        'endpoint' => env('KANYE_API_ENDPOINT'),
     ],
 
 ];

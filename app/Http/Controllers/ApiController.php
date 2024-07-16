@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ApiManager;
+use App\Services\QuoteManager;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
 {
-    protected $apiManager;
+    protected $quoteManager;
 
     /**
      * ApiController constructor.
      *
-     * @param ApiManager $apiManager
+     * @param QuoteManager $quoteManager
      */
-    public function __construct(ApiManager $apiManager)
+    public function __construct(QuoteManager $quoteManager)
     {
-        $this->apiManager = $apiManager;
+        $this->quoteManager = $quoteManager;
     }
 
     /**
@@ -26,7 +26,7 @@ class ApiController extends Controller
      */
     public function getData()
     {
-        $quotes = $this->apiManager->driver()->fetchData();
+        $quotes = $this->quoteManager->driver()->fetchQuotes();
 
         if ($quotes) {
             $data = [
@@ -46,7 +46,7 @@ class ApiController extends Controller
      */
     public function refreshData()
     {
-        $quotes = $this->apiManager->driver()->refreshData();
+        $quotes = $this->quoteManager->driver()->refreshQuotes();
 
         if ($quotes) {
             $data = [
